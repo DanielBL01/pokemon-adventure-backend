@@ -4,15 +4,17 @@ const port = process.env.PORT || 8000;
 const axios = require("axios");
 
 app.get('/habitat', async (req, res) => {
-    let response = {};
-    response['pokemon_list'] = [];
+    let response = [];
     var index = req.query.index;
 
     try {
         const habitat = await axios.get('https://pokeapi.co/api/v2/pokemon-habitat/' + index);
         habitat.data.pokemon_species.forEach((pokemon, index) => {
-            response['pokemon_list'].push(pokemon.name);
+            var data = {};
+            data['name'] = pokemon.name;
+            response.push(data);
         });
+        console.log('Successful Request');
     } catch (err) {
         if (err.response) {
             // client received an error response (5xx, 4xx)
@@ -26,7 +28,7 @@ app.get('/habitat', async (req, res) => {
         }
     }
 
-    res.send(response);
+    res.json(response);
 });
 
 httpServer.listen(port, () => {
