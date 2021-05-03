@@ -5,19 +5,23 @@ const axios = require("axios");
 const { getPokemonDetails } = require('./utils/pokemonDetails');
 
 app.get('/habitat', async (req, res) => {
-    let response = [];
-    var index = req.query.index;
+    let response = []
+    let list = [];
+    let index = req.query.index;
 
     try {
         const result = await axios.get(`https://pokeapi.co/api/v2/pokemon-habitat/${index}`);
-        for (const pokemon of result.data.pokemon_species) {
-            var data = {};
-            data['name'] = pokemon.name;
-            var details = await getPokemonDetails(pokemon.url);
-            data['details'] = details;
-            response.push(data); 
+        const data = result.data;
+
+        for (const pokemon of data.pokemon_species) {
+            list.push(pokemon.name);
         }
-        console.log('Successful Request');
+        
+        let randomPokemon = list[Math.floor(Math.random() * list.length)];
+        const details = await getPokemonDetails(randomPokemon);
+        response.push(details);
+        
+        res.json(response);
     } catch (err) {
         if (err.response) {
             // client received an error response (5xx, 4xx)
@@ -30,8 +34,6 @@ app.get('/habitat', async (req, res) => {
             console.log('Server Unexpected Error');
         }
     }
-
-    res.json(response);
 });
 
 httpServer.listen(port, () => {

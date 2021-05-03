@@ -1,23 +1,30 @@
 const axios = require("axios");
-const { getPokemonID } = require("./pokemonID");
 
-async function getPokemonDetails(url) {
+async function getPokemonDetails(name) {
     var response = {};
 
     try {
-        const id = await getPokemonID(url);
-        const result = await axios.get(`https://pokeapi.co/api/v2/pokemon/${id}`);
-        response['name'] = result.data.name;
-        response['id'] = result.data.id;
-        response['height'] = result.data.height;
-        response['weight'] = result.data.weight;
+        const result = await axios.get(`https://pokeapi.co/api/v2/pokemon/${name}`);
+        const pokemon_data = result.data;
+        response['name'] = name
+        response['id'] = pokemon_data.id;
+        response['height'] = pokemon_data.height;
+        response['weight'] = pokemon_data.weight;
 
-        var types = [];
-        result.data.types.forEach(type => {
+        let stats = [];
+        let entry = {};
+        pokemon_data.stats.forEach(stat => {
+            entry[stat.stat.name] = stat.base_stat;
+        });
+        stats.push(entry);
+        response['stats'] = stats;
+
+        let types = [];
+        pokemon_data.types.forEach(type => {
             types.push(type.type.name);
         });
-
         response['types'] = types;
+
         return response;
 
     } catch (err) {
