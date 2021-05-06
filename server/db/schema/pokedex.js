@@ -8,10 +8,12 @@ var pokedexSchema = new Schema({
     name: String,
     height: Number,
     weight: Number,
-    hp: Number,
-    attack: Number,
-    defense: Number, 
-    speed: Number,
+    stats: {
+        hp: Number,
+        attack: Number,
+        defense: Number,
+        speed: Number,
+    },
     types: [String]
 });
 

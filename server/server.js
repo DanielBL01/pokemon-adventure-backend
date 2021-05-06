@@ -26,29 +26,31 @@ app.get('/habitat', async (req, res) => {
         }
         
         let randomPokemon = list[Math.floor(Math.random() * list.length)];
-        const details = await PokemonDetails(randomPokemon);
-        response.push(details);
-        
-        const query = await Pokedex.exists({name: details.name});
-        if (query) {
-            console.log(`${details.name} is already in Pokedex!`);
+        const cache = await Pokedex.exists({name: randomPokemon});
+        if (cache) {
+            const result = await Pokedex.find({name: randomPokemon});
+            console.log('From Cache');
+            res.json(result);
         } else {
+            const details = await PokemonDetails(randomPokemon);
+            response.push(details);
             const pokedex = new Pokedex({
                 name: details.name,
                 height: details.height,
                 weight: details.weight,
-                hp: details.stats.hp,
-                attack: details.stats.attack,
-                defense: details.stats.defense, 
-                speed: details.stats.speed,
+                stats: {
+                    hp: details.stats.hp,
+                    attack: details.stats.attack,
+                    defense: details.stats.defense, 
+                    speed: details.stats.speed,
+                },
                 types: details.types
             });
             await pokedex.save();
-            console.log(`${details.name} has been added to the Pokedex!`);
+            console.log('From API');
+            res.json(response)
         }
-        res.json(response);
     } catch (err) {
-        console.log(err);
         res.sendStatus(404);
     }
 });
@@ -75,10 +77,12 @@ app.post('/partner', async (req, res) => {
         name: details.name,
         height: details.height,
         weight: details.weight,
-        hp: details.stats.hp,
-        attack: details.stats.attack,
-        defense: details.stats.defense, 
-        speed: details.stats.speed,
+        stats: {
+            hp: details.stats.hp,
+            attack: details.stats.attack,
+            defense: details.stats.defense, 
+            speed: details.stats.speed,
+        },
         types: details.types
     });
     await pokedex.save();
