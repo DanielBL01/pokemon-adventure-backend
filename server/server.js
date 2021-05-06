@@ -97,7 +97,7 @@ app.post('/catch', (req, res) => {
 });
 
 app.post('/release', (req, res) => {
-    var pokemon = req.body.pokemon;
+    const pokemon = req.body.pokemon;
     team.release(pokemon);
     res.send('Successfully released Pokémon')
 });
