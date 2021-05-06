@@ -29,7 +29,6 @@ app.get('/habitat', async (req, res) => {
         const cache = await Pokedex.exists({name: randomPokemon});
         if (cache) {
             const result = await Pokedex.find({name: randomPokemon});
-            console.log('From Cache');
             res.json(result);
         } else {
             const details = await PokemonDetails(randomPokemon);
@@ -47,7 +46,6 @@ app.get('/habitat', async (req, res) => {
                 types: details.types
             });
             await pokedex.save();
-            console.log('From API');
             res.json(response)
         }
     } catch (err) {
