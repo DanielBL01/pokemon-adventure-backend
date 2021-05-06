@@ -10,7 +10,6 @@ class Team {
         } else {
             console.log('You cannot have more than 6 Pokémon in your Team');
         }
-        return this.team;
     }
 
     release(pokemon) {
@@ -18,7 +17,6 @@ class Team {
             console.log(`${pokemon} has been released and removed from your Team`);
             this.team.filter(team => team === pokemon);
         }
-        return this.team;
     }
 
     get() {

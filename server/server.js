@@ -46,17 +46,20 @@ app.get('/habitat', async (req, res) => {
             await pokedex.save();
             console.log(`${details.name} has been added to the Pokedex!`);
         }
-
         res.json(response);
     } catch (err) {
-        if (err) {
-            console.log(err);
-        }
+        console.log(err);
+        res.sendStatus(404);
     }
 });
 
-app.get('/team', (req, res) => {
-    let response = team.get();
+app.get('/team', async (req, res) => {
+    let response = [];
+    let team_list = team.get();
+    for (const pokemon of team_list) {
+        const result = await Pokedex.find({name: pokemon});
+        response.push(result[0]);
+    }
     res.json(response);
 });
 
@@ -65,7 +68,24 @@ app.get('/pokedex', async (req, res) => {
     res.json(pokedex);
 });
 
-// Call after Catching a Pokemon and you have less than six Pokemon
+app.post('/partner', async (req, res) => {
+    const starter = req.body.starter;
+    const details = await PokemonDetails(starter);
+    const pokedex = new Pokedex({
+        name: details.name,
+        height: details.height,
+        weight: details.weight,
+        hp: details.stats.hp,
+        attack: details.stats.attack,
+        defense: details.stats.defense, 
+        speed: details.stats.speed,
+        types: details.types
+    });
+    await pokedex.save();
+    team.catch(starter);
+    res.send('Successfully selected a Starter')
+});
+
 app.post('/catch', (req, res) => {
     const pokemon = req.body.pokemon;
     team.catch(pokemon);
