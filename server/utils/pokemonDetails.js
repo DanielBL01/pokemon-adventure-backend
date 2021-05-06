@@ -25,13 +25,7 @@ async function PokemonDetails(name) {
         return response;
 
     } catch (err) {
-        if (err.response) {
-            console.log('Detail Response Error');
-        } else if (err.request) {
-            console.log('Detail Request Error');
-        } else {
-            console.log('Detail Unexpected Error');
-        }
+        console.log(err);
     }
 }
 

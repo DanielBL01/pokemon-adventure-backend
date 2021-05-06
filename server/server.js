@@ -2,10 +2,8 @@ const express = require('express');
 const app = express();
 const httpServer = require('http').createServer(app);
 const port = process.env.PORT || 8000;
-const bodyParser = require('body-parser')
 const axios = require("axios");
 const { PokemonDetails } = require('./utils/pokemonDetails');
-const mongoose = require('./db/mongoose');
 const { Pokedex } = require('./db/schema/pokedex');
 const { Team } = require('./utils/pokemonTeam');
 
@@ -31,14 +29,28 @@ app.get('/habitat', async (req, res) => {
         const details = await PokemonDetails(randomPokemon);
         response.push(details);
         
+        const query = await Pokedex.exists({name: details.name});
+        if (query) {
+            console.log(`${details.name} is already in Pokedex!`);
+        } else {
+            const pokedex = new Pokedex({
+                name: details.name,
+                height: details.height,
+                weight: details.weight,
+                hp: details.stats.hp,
+                attack: details.stats.attack,
+                defense: details.stats.defense, 
+                speed: details.stats.speed,
+                types: details.types
+            });
+            await pokedex.save();
+            console.log(`${details.name} has been added to the Pokedex!`);
+        }
+
         res.json(response);
     } catch (err) {
-        if (err.response) {
-            console.log('Server Response Error');
-        } else if (err.request) {
-            console.log('Server Request Error');
-        } else {
-            console.log('Server Unexpected Error');
+        if (err) {
+            console.log(err);
         }
     }
 });

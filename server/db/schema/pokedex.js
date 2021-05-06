@@ -1,22 +1,22 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const { Schema } = mongoose;
+const mongoDB = 'mongodb://127.0.0.1:27017/pokemon-adventure';
 
-const pokedexSchema = new Schema({
-    id: Number,
+mongoose.connect(mongoDB, {useNewUrlParser: true, useUnifiedTopology: true});
+
+var pokedexSchema = new Schema({
     name: String,
     height: Number,
     weight: Number,
     hp: Number,
     attack: Number,
     defense: Number, 
-    special_attack: Number,
-    special_defense: Number,
     speed: Number,
     types: [String]
 });
 
-const pokedexModel = mongoose.model('pokedex', pokedexSchema);
+var Pokedex = mongoose.model('Pokedex', pokedexSchema);
 
 module.exports = {
-    pokedexModel
+    Pokedex
 }
