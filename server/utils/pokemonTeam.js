@@ -3,23 +3,19 @@ class Team {
         this.team = [];
     }
 
-    add(pokemon) {
+    catch(pokemon) {
         if (this.team.length < 6) {
+            console.log(`${pokemon} has been caught and added to your Team`);
             this.team.push(pokemon);
+        } else {
+            console.log('You cannot have more than 6 Pokémon in your Team');
         }
         return this.team;
     }
 
-    swap(wild, team) {
-        var index = this.team.indexOf(team);
-        if (index !== -1) {
-            this.team[index] = wild;
-        }
-        return this.team;
-    }
-
-    remove(pokemon) {
+    release(pokemon) {
         if (this.team.length > 1) {
+            console.log(`${pokemon} has been released and removed from your Team`);
             this.team.filter(team => team === pokemon);
         }
         return this.team;

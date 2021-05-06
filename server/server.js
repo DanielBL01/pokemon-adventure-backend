@@ -60,26 +60,22 @@ app.get('/team', (req, res) => {
     res.json(response);
 });
 
-app.post('/add', (req, res) => {
+app.get('/pokedex', async (req, res) => {
+    const pokedex = await Pokedex.find({});
+    res.json(pokedex);
+});
+
+// Call after Catching a Pokemon and you have less than six Pokemon
+app.post('/catch', (req, res) => {
     const pokemon = req.body.pokemon;
-    team.add(pokemon);
-
-    res.send('Success')
+    team.catch(pokemon);
+    res.send('Successfully caught Pokémon')
 });
 
-app.post('/swap', (req, res) => {
-    var wild = req.body.wild;
-    var team = req.body.team;
-    team.swap(wild, team);
-
-    res.send('Success')
-});
-
-app.post('/remove', (req, res) => {
+app.post('/release', (req, res) => {
     var pokemon = req.body.pokemon;
-    team.remove(pokemon);
-
-    res.send('Success')
+    team.release(pokemon);
+    res.send('Successfully released Pokémon')
 });
 
 httpServer.listen(port, () => {
