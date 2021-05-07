@@ -68,6 +68,12 @@ app.get('/pokedex', async (req, res) => {
     res.json(pokedex);
 });
 
+app.post('/fighter', async (req, res) => {
+    const fighter = req.body.fighter;
+    const result = await Pokedex.find({name: fighter});
+    res.json(result);
+});
+
 app.post('/partner', async (req, res) => {
     const starter = req.body.starter;
     const details = await PokemonDetails(starter);
