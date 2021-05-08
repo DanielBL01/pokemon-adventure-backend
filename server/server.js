@@ -2,11 +2,13 @@ const express = require('express');
 const app = express();
 const httpServer = require('http').createServer(app);
 const port = process.env.PORT || 8000;
+const cors = require('cors');
 const axios = require("axios");
 const { PokemonDetails } = require('./utils/pokemonDetails');
 const { Pokedex } = require('./db/schema/pokedex');
 const { Team } = require('./utils/pokemonTeam');
 
+app.use(cors());
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
 
