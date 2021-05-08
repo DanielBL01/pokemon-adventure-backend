@@ -31,6 +31,11 @@ class Team {
     updateExperience(pokemon) {
         this.experience[pokemon] += 1;
     }
+
+    resetTeam() {
+        this.team = [];
+        this.experience = {};
+    }
 }
 
 module.exports = {

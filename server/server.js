@@ -73,6 +73,12 @@ app.get('/pokedex', async (req, res) => {
     res.json(pokedex);
 });
 
+app.get('/delete', async (req, res) => {
+    await Pokedex.deleteMany({});
+    team.resetTeam();
+    res.send('Successfully deleted cache and reset team');
+});
+
 app.post('/fighter', async (req, res) => {
     const fighter = req.body.fighter;
     const result = await Pokedex.find({name: fighter});
