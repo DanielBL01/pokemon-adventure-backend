@@ -63,6 +63,11 @@ app.get('/team', async (req, res) => {
     res.json(response);
 });
 
+app.get('/experience', (req, res) => {
+    let response = team.getExperience();
+    res.json(response);
+});
+
 app.get('/pokedex', async (req, res) => {
     const pokedex = await Pokedex.find({});
     res.json(pokedex);
@@ -104,6 +109,12 @@ app.post('/release', (req, res) => {
     const pokemon = req.body.pokemon;
     team.release(pokemon);
     res.send('Successfully released Pokémon')
+});
+
+app.post('/updateExperience', (req, res) => {
+    const pokemon = req.body.pokemon;
+    team.updateExperience(pokemon);
+    res.send('Successfully updated experience');
 });
 
 httpServer.listen(port, () => {
