@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
-const httpServer = require('http').createServer(app);
+const http = require('http');
+const httpServer = http.createServer(app);
 const port = process.env.PORT || 8000;
 const cors = require('cors');
 const axios = require("axios");
@@ -127,7 +128,8 @@ app.post('/updateExperience', (req, res) => {
 });
 
 const job = schedule.scheduleJob('*/30 * * * *', () => {
-    console.log('This job is running to prevent deep sleep...');
+    http.get('https://pokemon-adventure1.herokuapp.com/');
+    http.get('https://pokemon-adventure-server.herokuapp.com/');
 });
 
 httpServer.listen(port, () => {
