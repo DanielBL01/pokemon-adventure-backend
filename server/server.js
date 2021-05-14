@@ -4,6 +4,7 @@ const httpServer = require('http').createServer(app);
 const port = process.env.PORT || 8000;
 const cors = require('cors');
 const axios = require("axios");
+const schedule = require('node-schedule')
 const { PokemonDetails } = require('./utils/pokemonDetails');
 const { Pokedex } = require('./db/schema/pokedex');
 const { Team } = require('./utils/pokemonTeam');
@@ -123,6 +124,10 @@ app.post('/updateExperience', (req, res) => {
     const pokemon = req.body.pokemon;
     team.updateExperience(pokemon);
     res.send('Successfully updated experience');
+});
+
+const job = schedule.scheduleJob('*/30 * * * *', () => {
+    console.log('This job is running to prevent deep sleep...');
 });
 
 httpServer.listen(port, () => {
